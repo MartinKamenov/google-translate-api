@@ -32,7 +32,7 @@ function translate(text, opts) {
     return token.get(text).then(function (token) {
         var url = 'https://translate.google.com/translate_a/single';
         var data = {
-            client: 't',
+            client: 'gtx',
             sl: opts.from,
             tl: opts.to,
             hl: opts.to,
@@ -101,14 +101,13 @@ function translate(text, opts) {
 
             return result;
         }).catch(function (err) {
-            var e;
-            e = new Error();
+            err.message += `\nUrl: ${url}`;
             if (err.statusCode !== undefined && err.statusCode !== 200) {
-                e.code = 'BAD_REQUEST';
+                err.code = 'BAD_REQUEST';
             } else {
-                e.code = 'BAD_NETWORK';
+                err.code = 'BAD_NETWORK';
             }
-            throw e;
+            throw err;
         });
     });
 }
